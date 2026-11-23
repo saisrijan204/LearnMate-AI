@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--ink:#18233b;--muted:#69758d;--violet:#6c55d9;--mint:#ddf6e9;--paper:#f5f7fb;--line:#e4e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+.shell{max-width:1100px;margin:32px auto;padding:20px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.logo{display:flex;align-items:center;gap:12px;font-size:23px;font-weight:800}.mark{background:var(--violet);color:white;width:42px;height:42px;border-radius:13px;display:grid;place-items:center}
+.tag{color:var(--muted);font-size:13px}.layout{display:grid;grid-template-columns:280px 1fr;gap:22px}
+.panel,.main{background:white;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 10px 25px rgba(25,45,80,.04)}
+.panel h3{margin:0 0 18px}.mode{padding:14px;border:1px solid var(--line);border-radius:13px;margin-bottom:10px;cursor:pointer;font-weight:700}.mode.active{border-color:var(--violet);background:#f1eeff;color:var(--violet)}
+.mode small{display:block;color:var(--muted);font-weight:400;margin-top:5px}.help{margin-top:22px;padding:16px;background:#f7f8fb;border-radius:14px;color:var(--muted);font-size:13px;line-height:1.6}
+.main h1{margin:0 0 8px;font-size:27px}.main .sub{color:var(--muted);margin-bottom:22px}
+label{display:block;font-size:13px;font-weight:700;margin:16px 0 8px}input,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;font:inherit;color:var(--ink)}textarea{min-height:145px;resize:vertical}
+button{border:0;background:var(--violet);color:white;font-weight:800;padding:13px 18px;border-radius:12px;cursor:pointer;margin-top:15px}button:disabled{opacity:.5}
+.answer{margin-top:24px;background:#fafbff;border:1px solid var(--line);border-radius:15px;padding:18px;min-height:90px;white-space:pre-wrap;line-height:1.65}.empty{color:#8a95a9}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.shell{margin:10px;padding:10px}.top{align-items:flex-start;gap:12px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="top"><div class="logo"><div class="mark">LM</div>LearnMate AI</div><div class="tag">Your friendly study companion</div></div>
+  <div class="layout">
+    <aside class="panel">
+      <h3>Study tools</h3>
+      <div class="mode active" data-mode="explain" onclick="selectMode(this)">📚 Explain a topic<small>Simple explanations and examples</small></div>
+      <div class="mode" data-mode="quiz" onclick="selectMode(this)">🧠 Quiz me<small>Practice questions and answer key</small></div>
+      <div class="mode" data-mode="summary" onclick="selectMode(this)">📝 Summarize<small>Revision-friendly notes</small></div>
+      <div class="help"><b>How to use</b><br>Choose a study tool, enter your subject and question, then ask LearnMate. Use the answer to support your own learning and verify important facts with course materials.</div>
+    </aside>
+    <main class="main">
+      <h1>What are you learning today?</h1><div class="sub">Ask a question, practice a topic or create quick revision notes.</div>
+      <label for="subject">Subject (optional)</label><input id="subject" placeholder="e.g. Biology, C programming, History">
+      <label for="prompt">Your topic or question</label><textarea id="prompt" placeholder="e.g. Explain photosynthesis with a simple analogy..."></textarea>
+      <button id="ask" onclick="ask()">Ask LearnMate ✨</button>
+      <div class="answer" id="answer"><span class="empty">Your response will appear here.</span></div>
+    </main>
+  </div>
+</div>
+<script>
+let mode="explain";
+function selectMode(el){document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));el.classList.add("active");mode=el.dataset.mode}
+function ask(){
+  const prompt=document.getElementById("prompt").value.trim(), subject=document.getElementById("subject").value.trim();
+  if(!prompt){document.getElementById("answer").textContent="Please enter a topic or question first.";return}
+  const btn=document.getElementById("ask");btn.disabled=true;btn.textContent="Thinking...";
+  document.getElementById("answer").textContent="LearnMate is preparing your response...";
+  setTimeout(()=>{document.getElementById("answer").textContent="DEMO PREVIEW — this visual preview is not connected to Gemini. After deployment, the live app will generate a response.\\n\\nSelected mode: "+mode+"\\nSubject: "+subject+"\\nPrompt: "+prompt+"\\n\\nLive functionality requires deployment of the Apps Script backend and a Gemini API key.";btn.disabled=false;btn.textContent="Ask LearnMate ✨"},500);
+}
+</script>
+</body>
+</html>
